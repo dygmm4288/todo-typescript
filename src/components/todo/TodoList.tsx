@@ -1,4 +1,4 @@
-import useTodos from "../../hooks/useTodos.react-query";
+import useTodos from "../../hooks/useTodos";
 
 interface Props {
   todos: Todo[];

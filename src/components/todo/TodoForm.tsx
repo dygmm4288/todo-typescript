@@ -1,5 +1,5 @@
 import useInput from "../../hooks/useInput";
-import useTodos from "../../hooks/useTodos.react-query";
+import useTodos from "../../hooks/useTodos";
 export default function TodoForm() {
   const [title, handleTitle] = useInput();
   const [description, handleDescription] = useInput();
