@@ -1,5 +1,7 @@
+import TodoApp from "./components/todo/TodoApp";
+
 function App() {
-  return <div>App</div>;
+  return <TodoApp />;
 }
 
 export default App;
