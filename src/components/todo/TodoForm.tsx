@@ -1,5 +1,5 @@
 import useInput from "../../hooks/useInput";
-import useTodos from "../../hooks/useTodos";
+import useTodos from "../../hooks/useTodos.react-query";
 export default function TodoForm() {
   const [title, handleTitle] = useInput();
   const [description, handleDescription] = useInput();
@@ -8,8 +8,7 @@ export default function TodoForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newTodo: Todo = {
-      id: Date.now(),
+    const newTodo: Partial<Todo> = {
       title,
       description,
       isDone: false,
