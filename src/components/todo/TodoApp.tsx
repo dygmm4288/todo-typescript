@@ -1,9 +1,15 @@
+import { useEffect } from "react";
 import useTodos from "../../hooks/useTodos";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 
 export default function TodoApp() {
-  const { isDoneTodos, isNotDoneTodos } = useTodos();
+  const { isDoneTodos, isNotDoneTodos, fetchTodos } = useTodos();
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
   return (
     <>
       <TodoForm />
