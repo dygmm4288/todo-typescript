@@ -1,13 +1,18 @@
+import useTodos from "../../hooks/useTodos";
+
 interface Props {
   todos: Todo[];
-  handleDeleteTodo: (id: number) => () => void;
-  handleToggleTodo: (id: number) => () => void;
 }
-export default function TodoList({
-  todos,
-  handleDeleteTodo,
-  handleToggleTodo,
-}: Props) {
+export default function TodoList({ todos }: Props) {
+  const { deleteTodo, toggleTodo } = useTodos();
+
+  const handleDeleteTodo = (id: number) => () => {
+    deleteTodo(id);
+  };
+  const handleToggleTodo = (id: number) => () => {
+    toggleTodo(id);
+  };
+
   return (
     <ul>
       {todos.map(({ id, title, description, isDone }) => (
