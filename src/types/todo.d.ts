@@ -1,6 +1,10 @@
 declare type Todo = {
-  id: number;
-  title: string;
-  description: string;
-  isDone: boolean;
+  id: TodoId;
+  title: TodoTitle;
+  description: TodoDescription;
+  isDone: TodoIsDone;
 };
+declare type TodoId = number;
+declare type TodoTitle = string;
+declare type TodoDescription = string;
+declare type TodoIsDone = boolean;
