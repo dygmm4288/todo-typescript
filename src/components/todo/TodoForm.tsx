@@ -1,11 +1,11 @@
 import useInput from "../../hooks/useInput";
-
-interface Props {
-  addTodo: (todo: Todo) => void;
-}
-export default function TodoForm({ addTodo }: Props) {
+import { useAppDispatch } from "../../modules/hooks";
+import { addTodo } from "../../modules/todo/todoSlice";
+export default function TodoForm() {
   const [title, handleTitle] = useInput();
   const [description, handleDescription] = useInput();
+
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,7 +17,7 @@ export default function TodoForm({ addTodo }: Props) {
       isDone: false,
     };
 
-    addTodo(newTodo);
+    dispatch(addTodo(newTodo));
   };
 
   return (

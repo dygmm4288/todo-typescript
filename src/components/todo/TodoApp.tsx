@@ -1,4 +1,9 @@
-import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../modules/hooks";
+import {
+  deleteTodo,
+  selectTodos,
+  toggleTodo,
+} from "../../modules/todo/todoSlice";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 
@@ -8,27 +13,15 @@ enum TodoStatus {
 }
 
 export default function TodoApp() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const todos = useAppSelector(selectTodos);
 
-  const addTodo = (todo: Todo) => {
-    setTodos([...todos, todo]);
-  };
-  const deleteTodo = (id: number) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  };
-  const toggleTodo = (id: number) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) => {
-        if (todo.id === id) return { ...todo, isDone: !todo.isDone };
-        return todo;
-      }),
-    );
-  };
+  const dispatch = useAppDispatch();
+
   const handleDeleteTodo = (id: number) => () => {
-    deleteTodo(id);
+    dispatch(deleteTodo(id));
   };
   const handleToggleTodo = (id: number) => () => {
-    toggleTodo(id);
+    dispatch(toggleTodo(id));
   };
 
   const [isDoneTodos, isNotDoneTodos] = todos.reduce<[Todo[], Todo[]]>(
@@ -42,7 +35,7 @@ export default function TodoApp() {
 
   return (
     <>
-      <TodoForm addTodo={addTodo} />
+      <TodoForm />
       <section>
         <h1>working todo</h1>
         <TodoList
