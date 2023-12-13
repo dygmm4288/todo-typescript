@@ -4,12 +4,6 @@
       "id": 1,
       "title": "Learn typescript",
       "description": "Learn typescript today",
-      "isDone": true
-    },
-    {
-      "id": 2,
-      "title": "Learn javascript",
-      "description": "Learn javascript today",
       "isDone": false
     },
     {
@@ -22,6 +16,18 @@
       "id": 4,
       "title": "Learn Redux",
       "description": "Learn Redux thunk?",
+      "isDone": false
+    },
+    {
+      "id": 1702451809631,
+      "title": "hihihi",
+      "description": "hihihi",
+      "isDone": false
+    },
+    {
+      "id": 1702452535404,
+      "title": "asdf",
+      "description": "asdf",
       "isDone": false
     }
   ]

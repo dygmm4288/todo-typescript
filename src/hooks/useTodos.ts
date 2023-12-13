@@ -1,12 +1,12 @@
 import { useMemo } from "react";
-import jsonServerInstance from "../api/api";
 import { useAppDispatch, useAppSelector } from "../modules/hooks";
 import {
-  addTodo as addTodoSlice,
-  deleteTodo as deleteTodoSlice,
+  addTodoThunk,
+  deleteTodoThunk,
+  fetchTodoThunk,
+  selectTodoReducer,
   selectTodos,
-  setTodos,
-  toggleTodo as toggleTodoSlice,
+  toggleTodoThunk,
 } from "../modules/todo/todoSlice";
 
 enum TodoStatus {
@@ -16,29 +16,24 @@ enum TodoStatus {
 
 export default function useTodos() {
   const todos = useAppSelector(selectTodos);
+  const { error } = useAppSelector(selectTodoReducer);
 
   const dispatch = useAppDispatch();
 
   const addTodo = (todo: Todo) => {
-    dispatch(addTodoSlice(todo));
+    dispatch(addTodoThunk(todo));
   };
 
   const deleteTodo = (id: TodoId) => {
-    dispatch(deleteTodoSlice(id));
+    dispatch(deleteTodoThunk(id));
   };
 
-  const toggleTodo = (id: TodoId) => {
-    dispatch(toggleTodoSlice(id));
+  const toggleTodo = ({ id, isDone }: Pick<Todo, "id" | "isDone">) => {
+    dispatch(toggleTodoThunk({ id, isDone }));
   };
 
   const fetchTodos = async () => {
-    try {
-      const response = await jsonServerInstance.get("/todos");
-      dispatch(setTodos(response.data as Todo[]));
-    } catch (error) {
-      // ? 사실 근데 여기서 뭘 해야 할까
-      console.error(error);
-    }
+    dispatch(fetchTodoThunk());
   };
 
   // ? 이 부분에서 이렇게 해버린다면
@@ -71,5 +66,6 @@ export default function useTodos() {
     fetchTodos,
     isDoneTodos,
     isNotDoneTodos,
+    error,
   };
 }

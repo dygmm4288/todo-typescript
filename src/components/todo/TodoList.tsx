@@ -9,8 +9,8 @@ export default function TodoList({ todos }: Props) {
   const handleDeleteTodo = (id: number) => () => {
     deleteTodo(id);
   };
-  const handleToggleTodo = (id: number) => () => {
-    toggleTodo(id);
+  const handleToggleTodo = (id: number, isDone: boolean) => () => {
+    toggleTodo({ id, isDone });
   };
 
   return (
@@ -20,7 +20,7 @@ export default function TodoList({ todos }: Props) {
           <h2>{title}</h2>
           <p>{description}</p>
           <button onClick={handleDeleteTodo(id)}>삭제</button>
-          <button onClick={handleToggleTodo(id)}>
+          <button onClick={handleToggleTodo(id, !isDone)}>
             {!isDone ? "완료" : "취소"}
           </button>
         </li>
