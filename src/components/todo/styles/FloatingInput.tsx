@@ -1,12 +1,15 @@
+import { RefObject } from "react";
 import styled from "styled-components";
-
 export default function FloatingInput({
   id,
   value,
   onChange,
   placeholder,
+  inputRef,
   ...args
-}: React.InputHTMLAttributes<HTMLInputElement>) {
+}: {
+  inputRef?: RefObject<HTMLInputElement>;
+} & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <StWrapper>
       <input
@@ -14,6 +17,7 @@ export default function FloatingInput({
         id={id}
         onChange={onChange}
         placeholder={placeholder}
+        ref={inputRef}
         {...args}
       />
       <label htmlFor={id}>{placeholder}</label>

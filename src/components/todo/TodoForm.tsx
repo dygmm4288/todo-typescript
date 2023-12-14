@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
 import FloatingInput from "./styles/FloatingInput";
@@ -8,6 +9,8 @@ interface Props {
 export default function TodoForm({ addTodo }: Props) {
   const [title, handleTitle] = useInput();
   const [description, handleDescription] = useInput();
+
+  const titleRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,6 +23,9 @@ export default function TodoForm({ addTodo }: Props) {
     };
 
     addTodo(newTodo);
+    handleTitle("");
+    handleDescription("");
+    titleRef.current?.focus();
   };
 
   return (
@@ -30,6 +36,7 @@ export default function TodoForm({ addTodo }: Props) {
         required
         placeholder='타이틀을 입력해주세요'
         id='title-input'
+        inputRef={titleRef}
       />
       <FloatingInput
         value={description}
