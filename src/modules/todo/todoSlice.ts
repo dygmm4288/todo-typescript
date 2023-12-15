@@ -1,4 +1,9 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  ActionReducerMapBuilder,
+  PayloadAction,
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import jsonServerInstance from "../../api/api";
 import { RootState } from "../store";
@@ -10,6 +15,7 @@ export interface TodoState {
   isError: boolean;
   error: null | AxiosError;
 }
+
 const initialState: TodoState = {
   todos: [],
   isLoading: false,
@@ -63,18 +69,38 @@ export const toggleTodoThunk = createAsyncThunk(
     }
   },
 );
+type Keys = [
+  typeof fetchTodoThunk,
+  typeof addTodoThunk,
+  typeof deleteTodoThunk,
+  typeof toggleTodoThunk,
+];
+
+function addPendingCaseThunks(
+  this: ActionReducerMapBuilder<TodoState>,
+  thunks: Keys,
+) {
+  return thunks.reduce<typeof this>((builder, cur) => {
+    return builder.addCase(cur.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+      state.error = null;
+    });
+  }, this);
+}
 
 const todoSlice = createSlice({
   name: "todo",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchTodoThunk.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.error = null;
-      })
+    addPendingCaseThunks
+      .call(builder, [
+        fetchTodoThunk,
+        addTodoThunk,
+        deleteTodoThunk,
+        toggleTodoThunk,
+      ])
       .addCase(
         fetchTodoThunk.fulfilled,
         (state, action: PayloadAction<Todo[]>) => {
@@ -92,11 +118,6 @@ const todoSlice = createSlice({
           }
         },
       )
-      .addCase(addTodoThunk.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.error = null;
-      })
       .addCase(addTodoThunk.fulfilled, (state, action: PayloadAction<Todo>) => {
         state.isLoading = false;
         state.todos.push(action.payload);
@@ -106,11 +127,6 @@ const todoSlice = createSlice({
         if (action.payload instanceof AxiosError) {
           state.error = action.payload;
         }
-      })
-      .addCase(deleteTodoThunk.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.error = null;
       })
       .addCase(
         deleteTodoThunk.fulfilled,
@@ -125,11 +141,6 @@ const todoSlice = createSlice({
         if (action.payload instanceof AxiosError) {
           state.error = action.payload;
         }
-      })
-      .addCase(toggleTodoThunk.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.error = null;
       })
       .addCase(
         toggleTodoThunk.fulfilled,
