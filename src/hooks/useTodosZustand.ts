@@ -1,4 +1,8 @@
 import { create } from "zustand";
+enum TodoStatus {
+  IS_DONE,
+  IS_NOT_DONE,
+}
 interface TodoState {
   todos: Todo[];
   addTodo: (newTodo: Todo) => void;
@@ -6,7 +10,7 @@ interface TodoState {
   toggleTodo: (id: number) => void;
 }
 
-const useTodos = create<TodoState>()((set) => ({
+const useTodosZustand = create<TodoState>()((set) => ({
   todos: [] as Todo[],
   addTodo: (newTodo: Todo) =>
     set((state) => ({ todos: [newTodo, ...state.todos] })),
@@ -16,7 +20,7 @@ const useTodos = create<TodoState>()((set) => ({
     set((state) => ({ todos: toggleById(state.todos, id) })),
 }));
 
-export default useTodos;
+export default useTodosZustand;
 
 type Id = { id: number };
 type IsDone = { isDone: boolean };
@@ -30,3 +34,13 @@ function toggleById<T extends CanToggleWithId>(arr: T[], id: number) {
     item.id === id ? { ...item, isDone: !item.isDone } : item,
   );
 }
+
+export const getTodoWithIsDone = (todos: Todo[]) =>
+  todos.reduce<[Todo[], Todo[]]>(
+    (acc, todo) => {
+      if (todo.isDone) acc[TodoStatus.IS_DONE].push(todo);
+      else acc[TodoStatus.IS_NOT_DONE].push(todo);
+      return acc;
+    },
+    [[], []],
+  );

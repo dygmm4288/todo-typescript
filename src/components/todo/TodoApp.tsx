@@ -1,9 +1,14 @@
-import useTodos from "../../hooks/useTodos";
+import useTodosZustand, {
+  getTodoWithIsDone,
+} from "../../hooks/useTodosZustand";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 
 export default function TodoApp() {
-  const { isDoneTodos, isNotDoneTodos } = useTodos();
+  // const { isDoneTodos, isNotDoneTodos } = useTodos();
+
+  const { todos } = useTodosZustand();
+  const [isDoneTodos, isNotDoneTodos] = getTodoWithIsDone(todos);
 
   return (
     <>
