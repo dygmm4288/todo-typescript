@@ -9,7 +9,7 @@ export const todoApi = createApi({
   endpoints: (builder) => ({
     getTodos: builder.query<Todo[], void>({
       query: () => `/todos`,
-      providesTags: (result) =>
+      providesTags: [{ type: "Todos", id: "LIST" }] /* (result) =>
         result
           ? // successful query
             [
@@ -17,7 +17,7 @@ export const todoApi = createApi({
               { type: "Todos", id: "LIST" },
             ]
           : // an error occurred, but we still want to refetch this query when `{ type: 'Posts', id: 'LIST' }` is invalidated
-            [{ type: "Todos", id: "LIST" }],
+            [{ type: "Todos", id: "LIST" }], */,
     }),
     addTodo: builder.mutation<Todo, Todo>({
       query: (newTodo: Todo) => ({
