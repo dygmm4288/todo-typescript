@@ -1,11 +1,10 @@
-import useTodosZustand from "../../hooks/useTodosZustand";
+import useTodos from "../../hooks/useTodos";
 
 interface Props {
   todos: Todo[];
 }
 export default function TodoList({ todos }: Props) {
-  // const { deleteTodo, toggleTodo } = useTodos();
-  const { deleteTodo, toggleTodo } = useTodosZustand();
+  const { deleteTodo, toggleTodo } = useTodos();
 
   const handleDeleteTodo = (id: number) => () => {
     deleteTodo(id);
