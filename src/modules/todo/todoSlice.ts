@@ -7,6 +7,7 @@ import {
 import { AxiosError } from "axios";
 import jsonServerInstance from "../../api/api";
 import { RootState } from "../store";
+
 // 공식문서 참고 : https://redux.js.org/tutorials/typescript-quick-start
 
 export interface TodoState {
@@ -34,6 +35,7 @@ export const fetchTodoThunk = createAsyncThunk(
     }
   },
 );
+
 export const addTodoThunk = createAsyncThunk(
   "todo/addTodoThunk",
   async (todo: Todo, thunkAPI) => {
@@ -45,6 +47,7 @@ export const addTodoThunk = createAsyncThunk(
     }
   },
 );
+
 export const deleteTodoThunk = createAsyncThunk(
   "todo/deleteTodoThunk",
   async (id: TodoId, thunkAPI) => {
@@ -69,24 +72,19 @@ export const toggleTodoThunk = createAsyncThunk(
     }
   },
 );
-type Keys = [
-  typeof fetchTodoThunk,
-  typeof addTodoThunk,
-  typeof deleteTodoThunk,
-  typeof toggleTodoThunk,
-];
-
+// 내부적으로 pending이 존재한다는 것을 명시
+type Pending<P = any> = { pending: P };
 function addPendingCaseThunks(
-  this: ActionReducerMapBuilder<TodoState>,
-  thunks: Keys,
+  builder: ActionReducerMapBuilder<TodoState>,
+  thunks: Pending[],
 ) {
-  return thunks.reduce<typeof this>((builder, cur) => {
+  return thunks.reduce<typeof builder>((builder, cur) => {
     return builder.addCase(cur.pending, (state) => {
       state.isLoading = true;
       state.isError = false;
       state.error = null;
     });
-  }, this);
+  }, builder);
 }
 
 const todoSlice = createSlice({
@@ -94,13 +92,12 @@ const todoSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    addPendingCaseThunks
-      .call(builder, [
-        fetchTodoThunk,
-        addTodoThunk,
-        deleteTodoThunk,
-        toggleTodoThunk,
-      ])
+    addPendingCaseThunks(builder, [
+      fetchTodoThunk,
+      addTodoThunk,
+      deleteTodoThunk,
+      toggleTodoThunk,
+    ])
       .addCase(
         fetchTodoThunk.fulfilled,
         (state, action: PayloadAction<Todo[]>) => {
