@@ -1,46 +1,57 @@
-# Getting Started with Create React App
+# Typescript Todo list
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+typescript를 이용하여 단계별로 투두 리스트 구현하기
 
-## Available Scripts
+## level 단계
 
-In the project directory, you can run:
+1. state와 props를 이용하여 구현하기
+2. RTK를 이용하여 구현하기 
+3. RTK + json-server 이용하여 구현하기 
+4. RTK + json-server + redux thunk 이용하여 구현하기
+5. RTK + react-query 이용하여 구현하기
+6. Redux query 이용하여 구현하기
+7. zustand 이용하여 구현하기
+---
+### 다음 목표
+1. jotai 이용하여 구현하기
+2. SWR 이용하여 구현하기
+3. Context API 이용하여 구현하기
 
-### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 필수 구현 사항
+- Todo 항목 추가하기
+- Todo 항목 목록 표시
+- Todo 항목 삭제하기
+- Todo 완료 상태 표시 기능
+- Typescript를 이용하여 구현
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `yarn test`
+## 특징
+- level 1만 CSS 적용. 그 외 레벨은 기능 구현을 목적으로 함
+- 다양한 라이브러리들을 typescript를 이용하여 구현함으로써 각 라이브러리의 사용 방식과 typescript를 적용해서 구현할 수 있음에 그 목적이 있음
+- 각 레벨별로 Type을 다양한 방식으로 표현
+  - enum 사용
+  - generic 사용
+  - Partial, Omit, Pick 등 유틸 타입 사용
+  - 타입 추상화
+    ex ) ```typescript type TypeForDeleteTodo = Pick<Todo,'id'>```
+  - 중복제거에 목적을 둔 함수의 타입 설정
+    ```typescript
+    // 내부적으로 pending이 존재한다는 것을 명시 (level4)
+    type Pending<P = any> = { pending: P };
+    function addPendingCaseThunks(
+      builder: ActionReducerMapBuilder<TodoState>,
+      thunks: Pending[],
+    ) {
+      return thunks.reduce<typeof builder>((builder, cur) => {
+        return builder.addCase(cur.pending, (state) => {
+          state.isLoading = true;
+          state.isError = false;
+          state.error = null;
+        });
+      }, builder);
+    }
+    // id를 기반으로 index를 찾는 함수 (level4)
+    const findIndexByTodoId = (todos: Todo[], id: TodoId) => todos.findIndex((todo) => todo.id === id);
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+    ```
